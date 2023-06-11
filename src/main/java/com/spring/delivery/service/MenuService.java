@@ -2,9 +2,11 @@ package com.spring.delivery.service;
 
 import com.spring.delivery.domain.*;
 import com.spring.delivery.dto.*;
+import com.spring.delivery.exception.DuplicatedMenuException;
 import com.spring.delivery.repository.MenuRepository;
 import com.spring.delivery.repository.StatisticsRepository;
 import com.spring.delivery.repository.StoreRepository;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,7 @@ public class MenuService {
     private final StatisticsRepository statisticsRepository;
 
 
-    public void create(MenuRegisterDTO menuRegisterDTO){
+    public Long create(MenuRegisterDTO menuRegisterDTO){
 
         Store store = storeRepository.findOneById(menuRegisterDTO.getStoreId());
 
@@ -35,20 +37,19 @@ public class MenuService {
         );
 
         validateDuplicateMenu(menu);
-        menuRepository.save(menu);
+        return menuRepository.save(menu).getId();
     }
     private void validateDuplicateMenu(Menu menu){
         List<Menu> findMenus = menuRepository.findByName(menu.getName());
         if(!findMenus.isEmpty()){
-            throw new IllegalStateException("이미 등록되어 있는 햄버거입니다");
+            throw new DuplicatedMenuException("이미 등록되어 있는 메뉴입니다");
         }
     }
     public List<MenuInfoDTO> findAllMenus() {
         List<Menu> menus = menuRepository.findAll();
         List<MenuInfoDTO> menuInfoDTOList = new ArrayList<>();
         menus.forEach(menu -> {
-            MenuInfoDTO menuInfoDTO = new MenuInfoDTO();
-            menuInfoDTO.builder()
+            MenuInfoDTO menuInfoDTO = MenuInfoDTO.builder()
                     .name(menu.getName())
                     .price(menu.getPrice())
                     .description(menu.getDescription())
@@ -61,27 +62,26 @@ public class MenuService {
         return menuInfoDTOList;
     }
 
-    public Menu findMenuInfo(Long menuId) {
-        return menuRepository.findOneById(menuId);
+    public MenuInfoDTO findMenuInfo(Long menuId) {
+        Menu menu = menuRepository.findOneById(menuId);
+        return MenuInfoDTO.builder()
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .description(menu.getDescription())
+                .menuType(menu.getMenuType().toString().toLowerCase())
+                .discountPolicy(menu.getDiscountPolicy().toString().toLowerCase())
+                .imageName(menu.getImageName())
+                .build();
     }
 
-    public String updateMenu(MenuUpdateDTO menuUpdateDTO) {
+    public Long updateMenu(MenuUpdateDTO menuUpdateDTO) {
         List<Menu> findUpdateMenu = menuRepository.findByName(menuUpdateDTO.getName());
-        Menu menu = new Menu(findUpdateMenu.get(0).getName(), findUpdateMenu.get(0).getMenuType(), findUpdateMenu.get(0).getDiscountPolicy(),
-                findUpdateMenu.get(0).getPrice(), findUpdateMenu.get(0).getDescription(), findUpdateMenu.get(0).getImageName(),
-                findUpdateMenu.get(0).getStore(), findUpdateMenu.get(0).getStatistics(), findUpdateMenu.get(0).getOrderItem());
-        if(!menuUpdateDTO.getUpdatedName().isEmpty()) {
+        findUpdateMenu.forEach(menu -> {
             menu.setName(menuUpdateDTO.getUpdatedName());
-        }
-        Integer tmp = menuUpdateDTO.getPrice();
-        if(tmp != null) {
             menu.setPrice(menuUpdateDTO.getPrice());
-        }
-        if(!menuUpdateDTO.getDescription().isEmpty()) {
             menu.setDescription(menuUpdateDTO.getDescription());
-        }
-        menuRepository.save(menu);
-        return menu.getName();
+        });
+        return menuRepository.findOneById(findUpdateMenu.get(0).getId()).getId();
     }
 
     public void findAllDiscountPolicy() {
@@ -104,9 +104,13 @@ public class MenuService {
         List<StatisticsDTO> statisticsDTOS = new ArrayList<>();
         statistics.forEach(statistic -> {
             StatisticsDTO statisticsDTO = new StatisticsDTO();
-
-
-        } );
+            statisticsDTO.builder()
+                    .id(statistic.getId())
+                    .count(statistic.getCount())
+                    .menu(statistic.getMenu())
+                    .build();
+            statisticsDTOS.add(statisticsDTO);
+        });
         return statisticsDTOS;
     }
 }

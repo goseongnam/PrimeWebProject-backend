@@ -23,7 +23,7 @@ class DeliveryApplicationTests {
 	public void 메뉴등록() throws Exception{
 
 
-		MenuRegisterDTO menuRegisterDTO = new MenuRegisterDTO("싸이플렉스버거", MenuType.MAIN, 7000, "이 햄버거는 무척 맛있다",
+		MenuRegisterDTO menuRegisterDTO = new MenuRegisterDTO("싸이플렉스버거", MenuType.MAIN.toString(), 7000, "이 햄버거는 무척 맛있다",
 				"image001", 15L);
 		menuController.registerMenu(menuRegisterDTO);
 	}

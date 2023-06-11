@@ -25,13 +25,13 @@ public class MenuController {
     }
 
     @GetMapping("/detail") // 특정 메뉴 정보찾기
-    public Menu findMenuInfo(@RequestParam Long menuId){
+    public MenuInfoDTO findMenuInfo(@RequestParam Long menuId){
         return menuService.findMenuInfo(menuId);
     }
 
     @PostMapping("/update") // 특정 메뉴 수정
-    public void updateMenu(@RequestBody MenuUpdateDTO menuUpdateDTO){
-        menuService.updateMenu(menuUpdateDTO);
+    public Long updateMenu(@RequestBody MenuUpdateDTO menuUpdateDTO){
+        return menuService.updateMenu(menuUpdateDTO);
     }
     @PostMapping("/discount/list") // 할인 정책 찾기
     public void findAllDiscountPolicy(){

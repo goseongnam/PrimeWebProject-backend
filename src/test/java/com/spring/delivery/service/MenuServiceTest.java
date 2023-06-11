@@ -19,10 +19,10 @@ class MenuServiceTest {
 
     @Test
     void applyMenuPolicy() {
-        MenuRegisterDTO menuRegisterDTO = new MenuRegisterDTO("마라싸이버거", MenuType.MAIN, 7000, "이 햄버거는 무척 맛있다",
+        MenuRegisterDTO menuRegisterDTO = new MenuRegisterDTO("마라싸이버거", MenuType.MAIN.toString(), 7000, "이 햄버거는 무척 맛있다",
                 "image001", 15L);
         menuService.create(menuRegisterDTO);
-        MenuDiscountPolicyDTO menuDiscountPolicyDTO = new MenuDiscountPolicyDTO("마라싸이버거", DiscountPolicy.PERCENTAGE);
+        MenuDiscountPolicyDTO menuDiscountPolicyDTO = new MenuDiscountPolicyDTO("마라싸이버거", DiscountPolicy.PERCENTAGE.toString());
         Long menuId = menuService.applyMenuPolicy(menuDiscountPolicyDTO);
 
         assertThat(menuRegisterDTO.getName())
