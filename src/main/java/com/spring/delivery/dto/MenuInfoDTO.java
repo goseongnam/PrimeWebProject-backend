@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class MenuInfoDTO {
     private Long id;
     private String name;
-    private MenuType menuType;
-    private DiscountPolicy discountPolicy;
+    private String menuType;
+    private String discountPolicy;
     private int price;
     private String description;
     private String imageName;

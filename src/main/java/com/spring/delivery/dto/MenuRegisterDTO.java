@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MenuRegisterDTO {
     private String name;
-    private MenuType menuType;
+    private String menuType;
     private int price;
     private String description;
     private String imageName;
