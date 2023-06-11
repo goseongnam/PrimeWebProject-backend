@@ -1,46 +1,51 @@
 package com.spring.delivery.controller;
 
-import com.spring.delivery.dto.MenuDTO;
+import com.spring.delivery.domain.DiscountPolicy;
+import com.spring.delivery.domain.Menu;
+import com.spring.delivery.domain.MenuType;
+import com.spring.delivery.dto.MenuDiscountPolicyDTO;
+import com.spring.delivery.dto.MenuRegisterDTO;
+import com.spring.delivery.dto.MenuUpdateDTO;
 import com.spring.delivery.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu")
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
-
-    @PostMapping("/create")
-    public void registerMenu(@RequestBody MenuDTO menuDTO){
-        //menuService.create(menuDTO);
+    @PostMapping("/create") //메뉴등록
+    public void registerMenu(@RequestBody MenuRegisterDTO menuRegisterDTO){
+        menuService.create(menuRegisterDTO);
     }
 
-    @GetMapping("/list")
-    public void findAllMenu(){
-        //menuService.findAllMenus();
+    @GetMapping("/list") // 모든 메뉴 검색
+    public List<Menu> findAllMenu(){
+        return menuService.findAllMenus();
     }
 
-    @GetMapping("/detail")
-    public void findMenuInfo(@RequestParam Long menuId){
-        //menuService.findOneMenu(menuId);
+    @GetMapping("/detail") // 특정 메뉴 정보찾기
+    public Menu findMenuInfo(@RequestParam Long menuId){
+        return menuService.findMenuInfo(menuId);
     }
 
-    @PostMapping("/update")
-    public void updateMenu(@RequestBody MenuDTO menuDTO){
-        //menuService.update(menuDTO);
+    @PostMapping("/update") // 특정 메뉴 수정
+    public void updateMenu(@RequestBody MenuUpdateDTO menuUpdateDTO){
+        menuService.updateMenu(menuUpdateDTO);
     }
-    @PostMapping("/discount/list")
+    @PostMapping("/discount/list") // 할인 정책 찾기
     public void findAllDiscountPolicy(){
-        //menuService.findAllDiscountPolicy();
+        menuService.findAllDiscountPolicy();
     }
-    @PostMapping("/discount/apply")
-    public void applyMenuPolicy(@RequestBody MenuDTO menuDTO){
-        //menuService.updateMenuPolicy();
+    @PostMapping("/discount/apply") // 할인정책 적용
+    public void applyMenuPolicy(@RequestBody MenuDiscountPolicyDTO menuDiscountPolicyDTO){
+        menuService.applyMenuPolicy(menuDiscountPolicyDTO);
     }
-
-    @GetMapping("/statistic")
-    public void findstatistics(){
-
+    @GetMapping("/statistic") //통계 찾기
+    public void findStatistics(){
+        menuService.findStatistics();
     }
 }

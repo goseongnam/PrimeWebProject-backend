@@ -7,10 +7,11 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "USERS")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private RoleType roleType;
     private String email;
 
