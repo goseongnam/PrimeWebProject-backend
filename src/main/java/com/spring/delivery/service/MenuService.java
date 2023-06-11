@@ -2,6 +2,7 @@ package com.spring.delivery.service;
 
 import com.spring.delivery.domain.*;
 import com.spring.delivery.dto.MenuDiscountPolicyDTO;
+import com.spring.delivery.dto.MenuInfoDTO;
 import com.spring.delivery.dto.MenuRegisterDTO;
 import com.spring.delivery.dto.MenuUpdateDTO;
 import com.spring.delivery.repository.MenuRepository;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,9 +41,22 @@ public class MenuService {
             throw new IllegalStateException("이미 등록되어 있는 햄버거입니다");
         }
     }
-
-    public List<Menu> findAllMenus() {
-        return menuRepository.findAll();
+    public List<MenuInfoDTO> findAllMenus() {
+        List<Menu> menus = menuRepository.findAll();
+        List<MenuInfoDTO> menuInfoDTOList = new ArrayList<>();
+        menus.forEach(menu -> {
+            MenuInfoDTO menuInfoDTO = new MenuInfoDTO();
+            menuInfoDTO.builder()
+                    .name(menu.getName())
+                    .price(menu.getPrice())
+                    .description(menu.getDescription())
+                    .menuType(menu.getMenuType())
+                    .discountPolicy(menu.getDiscountPolicy())
+                    .imageName(menu.getImageName())
+                    .build();
+            menuInfoDTOList.add(menuInfoDTO);
+        });
+        return menuInfoDTOList;
     }
 
     public Menu findMenuInfo(Long menuId) {

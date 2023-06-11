@@ -28,17 +28,5 @@ class DeliveryApplicationTests {
 		menuController.registerMenu(menuRegisterDTO);
 	}
 
-	@Test
-	public void 모든메뉴검색() throws Exception{
-		List<Menu> allMenus = menuController.findAllMenu();
-
-		System.out.println("----------------------------------------------------------------");
-		for(int i=0; i<allMenus.size(); i++) {
-			System.out.print(allMenus.get(i).getId());
-			System.out.print(allMenus.get(i).getName());
-			System.out.println(allMenus.get(i).getPrice());
-		}
-		System.out.println("-----------------------------------------------------------------");
-	}
 
 }

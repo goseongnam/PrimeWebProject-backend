@@ -4,6 +4,7 @@ import com.spring.delivery.domain.DiscountPolicy;
 import com.spring.delivery.domain.Menu;
 import com.spring.delivery.domain.MenuType;
 import com.spring.delivery.dto.MenuDiscountPolicyDTO;
+import com.spring.delivery.dto.MenuInfoDTO;
 import com.spring.delivery.dto.MenuRegisterDTO;
 import com.spring.delivery.dto.MenuUpdateDTO;
 import com.spring.delivery.service.MenuService;
@@ -23,7 +24,7 @@ public class MenuController {
     }
 
     @GetMapping("/list") // 모든 메뉴 검색
-    public List<Menu> findAllMenu(){
+    public List<MenuInfoDTO> findAllMenu(){
         return menuService.findAllMenus();
     }
 
