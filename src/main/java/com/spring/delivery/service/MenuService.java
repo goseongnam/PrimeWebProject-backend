@@ -89,19 +89,13 @@ public class MenuService {
     }
 
     public Long applyMenuPolicy(MenuDiscountPolicyDTO menuDiscountPolicyDTO) {
-        DiscountPolicy tmp;
-        if(menuDiscountPolicyDTO.getDiscountPolicy() == "DEFAULT") {
-            tmp = DiscountPolicy.DEFAULT;
-        } else if (menuDiscountPolicyDTO.getDiscountPolicy() == "PERCENTAGE"){
-            tmp = DiscountPolicy.PERCENTAGE;
-        } else if (menuDiscountPolicyDTO.getDiscountPolicy() == "QUANTITY") {
-            tmp = DiscountPolicy.QUANTITY;
-        } else {
-            tmp = DiscountPolicy.EARLYBIRD;
-        }
-
         List<Menu> findUpdateMenu = menuRepository.findByName(menuDiscountPolicyDTO.getName());
-        findUpdateMenu.forEach(menu -> menu.setDiscountPolicy(tmp));
+        findUpdateMenu.forEach( menu ->
+                menu.setDiscountPolicy(
+                        DiscountPolicy.valueOf(menuDiscountPolicyDTO.getDiscountPolicy().toUpperCase()
+                        )
+                )
+        );
         return menuRepository.findByName(menuDiscountPolicyDTO.getName()).get(0).getId();
     }
 
